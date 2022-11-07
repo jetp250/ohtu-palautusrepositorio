@@ -1,5 +1,5 @@
 import unittest
-from statistics import Statistics
+from statistics import Statistics, SortBy
 from player import Player
 
 class PlayerReaderStub:
@@ -46,13 +46,32 @@ class TestStatistics(unittest.TestCase):
         self.assertEqual(0, len(self.statistics.team("PHI")))
 
     def test_top_players_are_in_correct_order(self):
-        self.assertEqual(self.statistics.top(5), [
+        self.assertEqual(self.statistics.top(5, SortBy.POINTS), [
             Player("Gretzky", "EDM", 35, 89),
             Player("Lemieux", "PIT", 45, 54),
             Player("Yzerman", "DET", 42, 56),
             Player("Kurri",   "EDM", 37, 53),
             Player("Semenko", "EDM", 4, 12),
         ])
+
+        self.assertEqual(self.statistics.top(5, SortBy.GOALS), [
+            Player("Lemieux", "PIT", 45, 54),
+            Player("Yzerman", "DET", 42, 56),
+            Player("Kurri",   "EDM", 37, 53),
+            Player("Gretzky", "EDM", 35, 89),
+            Player("Semenko", "EDM", 4, 12),
+        ])
+        
+        self.assertEqual(self.statistics.top(5, SortBy.ASSISTS), [
+            Player("Gretzky", "EDM", 35, 89),
+            Player("Yzerman", "DET", 42, 56),
+            Player("Lemieux", "PIT", 45, 54),
+            Player("Kurri",   "EDM", 37, 53),
+            Player("Semenko", "EDM", 4, 12),
+        ])
+
+    def test_top_sorts_by_points_when_parameter_omitted(self):
+        self.assertEqual(self.statistics.top(5, SortBy.POINTS), self.statistics.top(5))
 
     def test_top_respects_count(self):
         # Test that it only returns the top 3 if requested
