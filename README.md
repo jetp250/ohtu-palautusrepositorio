@@ -1,2 +1,3 @@
 # ohtu-palautusrepositorio
-HY Ohjelmistotuotanto 2022 viikko 1
+
+https://github.com/jetp250/ohtuvarasto
