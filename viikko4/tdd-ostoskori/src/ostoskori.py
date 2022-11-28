@@ -29,8 +29,7 @@ class Ostoskori:
                 return
 
     def tyhjenna(self):
-        pass
-        # tyhjentää ostoskorin
+        self.tavarat.clear()
 
     def ostokset(self):
         # Bad: kannattaisi palauttaa immutaabeli näkymä listaan, eikä itse listaa.
