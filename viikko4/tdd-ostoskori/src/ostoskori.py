@@ -16,14 +16,15 @@ class Ostoskori:
             # Tuotteella ei ole == operaattoria eikä sitä saa muokata
             if ostos.tuote.nimi() == lisattava.nimi() and ostos.tuote.hinta() == lisattava.hinta():
                 ostos.muuta_lukumaaraa(1)
-                print("Löytyi")
                 return
 
         self.tavarat.append(Ostos(lisattava))
 
     def poista_tuote(self, poistettava: Tuote):
-        # poistaa tuotteen
-        pass
+        for ostos in self.tavarat:
+            if ostos.tuote.nimi() == poistettava.nimi() and ostos.tuote.hinta() == poistettava.hinta():
+                ostos.muuta_lukumaaraa(-1)
+                return
 
     def tyhjenna(self):
         pass
