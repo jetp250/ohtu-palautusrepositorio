@@ -6,15 +6,19 @@ class Ostoskori:
         self.tavarat = []
 
     def tavaroita_korissa(self):
-        return len(self.tavarat)
-        # kertoo korissa olevien tavaroiden lukumäärän
-        # eli jos koriin lisätty 2 kpl tuotetta "maito", tulee metodin palauttaa 2 
-        # samoin jos korissa on 1 kpl tuotetta "maito" ja 1 kpl tuotetta "juusto", tulee metodin palauttaa 2 
+        return sum(ostos.lukumaara() for ostos in self.tavarat)
 
     def hinta(self):
         return sum(ostos.hinta() for ostos in self.tavarat)
 
     def lisaa_tuote(self, lisattava: Tuote):
+        for ostos in self.tavarat:
+            # Tuotteella ei ole == operaattoria eikä sitä saa muokata
+            if ostos.tuote.nimi() == lisattava.nimi() and ostos.tuote.hinta() == lisattava.hinta():
+                ostos.muuta_lukumaaraa(1)
+                print("Löytyi")
+                return
+
         self.tavarat.append(Ostos(lisattava))
 
     def poista_tuote(self, poistettava: Tuote):
