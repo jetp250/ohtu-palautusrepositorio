@@ -47,7 +47,6 @@ class TestOstoskori(unittest.TestCase):
 
         self.assertEqual(self.kori.tavaroita_korissa(), 2)
 
-    # Onko liian pitkiä nimiä edes olemassa? Tämähän on täydellisen kuvaava.
     def test_kahden_saman_tuotteen_lisaamisen_jalkeen_korin_hinta_on_kaksi_kertaa_tavaran_hinta(self):
         maito = Tuote("Maito", 3)
         self.kori.lisaa_tuote(maito)
@@ -90,3 +89,12 @@ class TestOstoskori(unittest.TestCase):
 
         ostokset = self.kori.ostokset()
         self.assertEqual(len(ostokset), 1)
+
+    def test_kahden_saman_tuotteen_lisaamisen_jalkeen_korissa_yksi_ostos_jolla_nimi_oikein_ja_maara_kaksi(self):
+        maito = Tuote("Maito", 3)
+        self.kori.lisaa_tuote(maito)
+        self.kori.lisaa_tuote(maito)
+
+        ostos = self.kori.ostokset()[0]
+        self.assertEqual(ostos.tuotteen_nimi(), "Maito")
+        self.assertEqual(ostos.lukumaara(), 2)
