@@ -1,8 +1,9 @@
 from enum import Enum
 from tkinter import ttk, constants, StringVar
+from copy import copy
 
 from sovelluslogiikka import Sovelluslogiikka
-from komennot import Summa, Erotus, Nollaus, Kumoa
+from komennot import Summa, Erotus, Nollaus
 
 class Komento(Enum):
     SUMMA = 1
@@ -20,8 +21,8 @@ class Kayttoliittyma:
             Komento.SUMMA: Summa(sovelluslogiikka, self._lue_syote),
             Komento.EROTUS: Erotus(sovelluslogiikka, self._lue_syote),
             Komento.NOLLAUS: Nollaus(sovelluslogiikka),
-            Komento.KUMOA: Kumoa(sovelluslogiikka)
         }
+        self._edellinen_komento = None
 
     def kaynnista(self):
         self._tulos_var = StringVar()
@@ -67,9 +68,14 @@ class Kayttoliittyma:
         return int(self._syote_kentta.get())
 
     def _suorita_komento(self, komento):
-        komento_olio = self._komennot[komento]
-        komento_olio.suorita()
-        self._kumoa_painike["state"] = constants.NORMAL
+        if komento == Komento.KUMOA:
+            self._kumoa()
+        else:
+            komento_olio = self._komennot[komento]
+            komento_olio.suorita()
+            komento_olio.edellinen = copy(self._edellinen_komento)
+            self._edellinen_komento = komento_olio
+            self._kumoa_painike["state"] = constants.NORMAL
 
         if self._sovelluslogiikka.tulos == 0:
             self._nollaus_painike["state"] = constants.DISABLED
@@ -78,3 +84,13 @@ class Kayttoliittyma:
 
         self._syote_kentta.delete(0, constants.END)
         self._tulos_var.set(self._sovelluslogiikka.tulos)
+
+    def _kumoa(self):
+        if self._edellinen_komento is None:
+            return
+
+        self._edellinen_komento.kumoa()
+        # Rajaton undo-historia
+        self._edellinen_komento = self._edellinen_komento.edellinen
+        if self._edellinen_komento is None:
+            self._kumoa_painike["state"] = constants.DISABLED
