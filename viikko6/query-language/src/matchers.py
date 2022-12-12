@@ -9,13 +9,6 @@ class Not:
     def test(self, player):
         return not self._matcher.test(player)
 
-class HasFewerThan:
-    def __init__(self, value, attr):
-        self._matcher = HasAtLeast(value, attr)
-
-    def test(self, player):
-        return not self._matcher.test(player)
-
 class And:
     def __init__(self, *matchers):
         self._matchers = matchers
@@ -44,7 +37,6 @@ class PlaysIn:
     def test(self, player):
         return player.team == self._team
 
-
 class HasAtLeast:
     def __init__(self, value, attr):
         self._value = value
@@ -54,3 +46,10 @@ class HasAtLeast:
         player_value = getattr(player, self._attr)
 
         return player_value >= self._value
+
+class HasFewerThan:
+    def __init__(self, value, attr):
+        self._matcher = HasAtLeast(value, attr)
+
+    def test(self, player):
+        return not self._matcher.test(player)
